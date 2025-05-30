@@ -42,7 +42,7 @@
                         <div class="mb-3 row">
                             <label for="email" class="col-sm-5 col-form-label">Email</label>
                             <div class="col-sm-7">
-                                <input type="email" class="p-2 form-control-plaintext" id="email" name="email"
+                                <input type="email" class="p-2 form-control" id="email" name="email"
                                     value="" autocomplete="off" autofocus>
                             </div>
                         </div>
