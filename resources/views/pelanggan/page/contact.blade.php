@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <img src="{{ asset('assets/images/contoh2.png') }}" style="width: 100%" alt="">
+            <img src="{{ asset('assets/images/contact.jpg') }}" style="width: 90%" alt="">
         </div>
     </div>
     <div class="d-flex justify-content-lg-between mt-5">

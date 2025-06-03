@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StoreProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\TransaksiController;
 
 
 /*
@@ -18,7 +19,7 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/',[\App\Http\Controllers\Controller::class, 'index'])->name('home');
+Route::get('/',[\App\Http\Controllers\TransaksiController::class, 'index'])->name('home');
 Route::get('/shop',[\App\Http\Controllers\Controller::class, 'shop'])->name('shop');
 Route::get('/transaksi',[\App\Http\Controllers\Controller::class, 'transaksi'])->name('transaksi');
 Route::get('/contact',[\App\Http\Controllers\Controller::class, 'contact'])->name('contact');
@@ -27,6 +28,7 @@ Route::get('/checkout',[\App\Http\Controllers\Controller::class, 'checkout'])->n
 Route::post('/admin/loginProses', [AdminController::class, 'loginProses'])->name('loginProses');
 Route::get('/admin', [AdminController::class, 'login'])->name('login');
 Route::get('/admin/dashboard', [AdminController::class, 'admin'])->name('admin');
+Route::get('/admin/logout', [AdminController::class, 'logout'])->name('logout');
 Route::get('/admin/product', [ProductController::class, 'index'])->name('product');
 
 Route::get('/admin/user_management', [UserController::class, 'index'])->name('userManagement');

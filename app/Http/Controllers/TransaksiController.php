@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Transaksi;
 use App\Http\Requests\StoreTransaksiRequest;
 use App\Http\Requests\UpdateTransaksiRequest;
+use App\Models\product;
 
 class TransaksiController extends Controller
 {
@@ -13,8 +14,15 @@ class TransaksiController extends Controller
      */
     public function index()
     {
-        //
+        $best = product::where('quantity_out','>=',5)->get();
+        $data = product::paginate(8);
+        return view('pelanggan.page.home', [
+            'title'     => 'Home',
+            'data'      => $data,
+            'best'      => $best,
+        ]);
     }
+    
 
     /**
      * Show the form for creating a new resource.

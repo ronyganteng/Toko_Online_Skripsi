@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\product;
 
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -11,14 +12,12 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
-    public function index(){
-        return view('pelanggan.page.home', [
-            'title'     => 'Home'
-        ]);
-    }
     public function shop(){
+
+        $data = product::paginate(8);
         return view('pelanggan.page.shop', [
-            'title'     => 'Shop'
+            'title'     => 'Shop',
+            'data' => $data,
         ]);
     }
     public function transaksi(){

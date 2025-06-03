@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 
+@if (session()->has('Berhasil'))
+        <div class="alert alert-success" role="alert">
+            {{ session('Berhasil') }}
+        </div>
+@endif
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,6 +44,12 @@
                 </div>
                 <form action="{{ route('loginProses') }}" method="POST">
                     @csrf
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            <b>Oppss ...!</b> {{session('error')}}
+                        </div>
+                    @endif
+
                     <div class="card-body">
                         <div class="mb-3 row">
                             <label for="email" class="col-sm-5 col-form-label">Email</label>

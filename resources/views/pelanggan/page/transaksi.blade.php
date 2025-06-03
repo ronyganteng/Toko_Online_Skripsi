@@ -12,7 +12,7 @@
     <h3 class="mt-5">Keranjang Belanja</h3>
     <div class="card mb-3">
         <div class="card-body d-flex gap-4">
-            <img src="{{ asset('assets/images/contoh.png') }}" alt="">
+            <img src="{{ asset('assets/images/contoh3.png') }}" alt="">
             <div class="desc w-100">
                 <p style="font-size: 24px; font-weight: 700">Salib Yesus</p>
                 <input type="number" class="form-control border-0 fs-1" id="harga" value="100000">

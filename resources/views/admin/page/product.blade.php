@@ -46,32 +46,35 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($data as $y => $x)
-                        <tr>
-                            <td>{{ ++$y }}</td>
-                            <td>
-                                <img src="{{ asset('storage/product/' . $x->foto) }}" style="width: 100px">
-                            </td>
-                            <td>{{ $x->created_at }}</td>
-                            <td>{{ $x->sku }}</td>
-                            <td>{{ $x->nama_product }}</td>
-                            <td>{{ $x->type . ' ' . $x->kategory }}
-                            </td>
-
-
-                            <td>{{ $x->harga }}</td>
-                            <td>{{ $x->quantity }}</td>
-
-                            <td>
-                                <button class="btn btn-success" data-id="{{ $x->id }}">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-danger">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </td>
+                    @if ($data->isEmpty())
+                        <tr class="text-center">
+                            <td colspan="9">Belum ada barang</td>
+                        </tr>
+                    @else
+                        @foreach ($data as $y => $x)
+                        <tr class="align-middle">
+                                <td>{{ ++$y }}</td>
+                                <td>
+                                    <img src="{{ asset('storage/product/' . $x->foto) }}" style="width: 100px">
+                                </td>
+                                <td>{{ $x->created_at }}</td>
+                                <td>{{ $x->sku }}</td>
+                                <td>{{ $x->nama_product }}</td>
+                                <td>{{ $x->type . ' ' . $x->kategory }}</td>
+                                <td>{{ $x->harga }}</td>
+                                <td>{{ $x->quantity }}</td>
+                                <td>
+                                    <input type="hidden" id="sku" value="{{$x->sku}}">
+                                    <button class="btn btn-success" data-id="{{ $x->id }}">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-danger">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
                         </tr>
                     @endforeach
+                @endif
 
                 </tbody>
             </table>

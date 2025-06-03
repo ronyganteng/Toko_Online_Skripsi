@@ -44,19 +44,17 @@ class AdminController extends Controller
     $user = User::where('email', $request->email)->first();
 
     if (!$user) {
-        dd('masuk0');
         Session::flash('error', 'Akun tidak ditemukan.');
         return back();
     }
 
     if ($user->is_admin == 0) {
-        dd('masuk1');
         Session::flash('error', 'Kamu bukan admin!');
         return back();
     }
 
     if (Auth::attempt($dataLogin)) {
-        Session::flash('success', 'Kamu berhasil login');
+        session()->flash('Berhasil', 'Data Berhasil Disimpan');
         $request->session()->regenerate();
         return redirect('/admin/dashboard');
     } else {
@@ -64,5 +62,15 @@ class AdminController extends Controller
         return redirect('/admin');
     }
 }
+
+    public function logout()
+    {
+        Auth::logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        return redirect('admin');
+
+    }
 
 }
