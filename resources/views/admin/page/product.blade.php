@@ -1,13 +1,15 @@
 @extends('admin.layout.index')
 
 @section('content')
-    @include('sweetalert::alert')
 
-    @if (session()->has('Berhasil'))
-        <div class="alert alert-success" role="alert">
-            {{ session('Berhasil') }}
-        </div>
-    @endif
+@if (session('berhasil_update') || session('Berhasil'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('berhasil_update') ?? session('Berhasil') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
+
     <div class="card mb-1">
         <div class="card-body d-flex flex-row justify-content-between">
             <div class="filter d-flex flex-lg-row gap-3">
@@ -121,3 +123,5 @@
                 });
             </script>
         @endsection
+
+

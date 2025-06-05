@@ -22,5 +22,8 @@ class product extends Model
         'foto',
         'is_active',
     ];
-    protected $hidden;
+    //public function product()
+    //{
+     //   return $this->hasOne(TblCart::class,'', 'id');
+    //}
 }

@@ -14,12 +14,14 @@ class AdminController extends Controller
     {
         return view('admin.page.dashboard', [
             'name'  => 'Dashboard',
-            'title' => 'Admin Dashboard'
+            'title' => 'Admin Dashboard',
+            ''
         ]);
     }
     
     public function report()
     {
+    
         return view('admin.page.report', [
             'name'  => 'Report',
             'title' => 'Admin Report'

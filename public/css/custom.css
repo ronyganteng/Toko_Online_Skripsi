@@ -10,26 +10,37 @@ main{
     min-height: 100vh;
     overflow: hidden;
 }
-.icon-nav{
+/*.icon-nav{
     position: relative;
     color: #FFFFFF8C;
-}
+}*/
     
 .circle{
     position : absolute;
-    width: 20px;
-    height: 20px;
+    top: 0px;
+    right: 0px;
     border-radius: 50%;
     background-color: red;
     color: white;
-    text-align: center;
     font-size: 12px;
-    top:10px;
-    right:1px;
+    padding: 2px 5px;
 }
-.icon-nav:hover{
+/*.icon-nav:hover{
     color:white;
+} */
+.notif{
+    position: relative;
+    display: inline-block;
 }
+.fa-bag-shopping{
+    font-size: 24px;
+    color: rgb(213, 212, 212);
+
+}
+.fa-bag-shopping:hover{
+    color: white;
+}
+
 section{
     min-height: 100vh;
 }

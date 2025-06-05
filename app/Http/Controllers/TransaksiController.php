@@ -6,6 +6,9 @@ use App\Models\Transaksi;
 use App\Http\Requests\StoreTransaksiRequest;
 use App\Http\Requests\UpdateTransaksiRequest;
 use App\Models\product;
+use App\Models\TblCart;
+use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class TransaksiController extends Controller
 {
@@ -16,10 +19,12 @@ class TransaksiController extends Controller
     {
         $best = product::where('quantity_out','>=',5)->get();
         $data = product::paginate(8);
+        $countKeranjang = TblCart::where(['idUser'=>'guest123', 'status' => 0])->count();
         return view('pelanggan.page.home', [
             'title'     => 'Home',
             'data'      => $data,
             'best'      => $best,
+            'count'     => $countKeranjang,
         ]);
     }
     
@@ -27,9 +32,22 @@ class TransaksiController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function addToCart(Request $request)
     {
-        //
+        $idProduct = $request->input('idProduct');
+        $product = product::find($idProduct);
+        $db = new tblCart;
+
+        $field = [
+            'idUser'  =>'guest123',
+            'id_barang' => $idProduct,
+            'qty'=> 1,
+            'price' =>$product->harga,
+        ];
+
+        $db::create($field);
+        Alert::toast('Keranjang berhasil Ditambah' , 'info');
+        return redirect('/');
     }
 
     /**

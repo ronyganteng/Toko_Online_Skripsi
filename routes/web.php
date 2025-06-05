@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StoreProductController;
@@ -20,10 +21,14 @@ use App\Http\Controllers\TransaksiController;
 */
 
 Route::get('/',[\App\Http\Controllers\TransaksiController::class, 'index'])->name('home');
+Route::POST('/addToCart',[\App\Http\Controllers\TransaksiController::class, 'addToCart'])->name('addToCart');
 Route::get('/shop',[\App\Http\Controllers\Controller::class, 'shop'])->name('shop');
 Route::get('/transaksi',[\App\Http\Controllers\Controller::class, 'transaksi'])->name('transaksi');
 Route::get('/contact',[\App\Http\Controllers\Controller::class, 'contact'])->name('contact');
+
 Route::get('/checkout',[\App\Http\Controllers\Controller::class, 'checkout'])->name('checkout');
+Route::POST('/checkout/proses/{id}',[\App\Http\Controllers\Controller::class, 'prosesCheckout'])->name('checkout.product');
+Route::POST('/checkout/prosesPembayaran',[\App\Http\Controllers\Controller::class, 'prosesPembayaran'])->name('checkout.bayar');
 
 Route::post('/admin/loginProses', [AdminController::class, 'loginProses'])->name('loginProses');
 Route::get('/admin', [AdminController::class, 'login'])->name('login');
@@ -47,4 +52,7 @@ Route::POST('/admin/addData', [ProductController::class, 'store'])->name('addDat
 Route::GET('/admin/editModal/{id}', [ProductController::class, 'show'])->name('editModal');
 Route::PUT('/admin/updateData/{id}', [ProductController::class, 'update'])->name('updateData');
 
-    
+Route::get('/coba-alert', function () {
+    \RealRashid\SweetAlert\Facades\Alert::success('Berhasil', 'SweetAlert Berfungsi!');
+    return view('pelanggan.page.contact', ['title' => 'Contact Us', 'count' => 0]);
+});

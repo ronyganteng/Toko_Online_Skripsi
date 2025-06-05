@@ -5,25 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class modelDetailTransaksi extends Model
+class TblCart extends Model
 {
     use HasFactory;
-    protected $table = 'detail_transaksis';
     public $timestamps = true;
     protected $fillable = [
-        'id_transaksi',
+        'idUser',
         'id_barang',
         'qty',
         'price',
         'status',
     ];
-    public function transaksi()
-    {
-        return $this->hasOne(transaksi::class, 'id_transaksi' , 'id');
-    }
 
     public function product()
     {
-        return $this->hasOne(product::class, 'id_barang' , 'id');
+        return $this->hasOne(product::class, 'id', 'id_barang');
     }
 }

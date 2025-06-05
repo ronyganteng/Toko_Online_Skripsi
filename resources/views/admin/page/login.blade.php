@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-@if (session()->has('Berhasil'))
-        <div class="alert alert-success" role="alert">
-            {{ session('Berhasil') }}
-        </div>
-@endif
+
 
 <head>
     <meta charset="UTF-8">
@@ -36,44 +32,50 @@
 
 
 <body>
-
+    @if (session()->has('Berhasil'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert"
+            style="width: 30vw; margin: auto; margin-bottom: 10px;">
+            <strong>Success!</strong> {{ session('Berhasil') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     <main>
-            <div class="card p-4 m-auto" style="width: 30vw;">
-                <div class="card-header bg-transparent text-center">
-                    <h5 >{{ $name }}</h5>
-                </div>
-                <form action="{{ route('loginProses') }}" method="POST">
-                    @csrf
-                    @if (session('error'))
-                        <div class="alert alert-danger">
-                            <b>Oppss ...!</b> {{session('error')}}
-                        </div>
-                    @endif
-
-                    <div class="card-body">
-                        <div class="mb-3 row">
-                            <label for="email" class="col-sm-5 col-form-label">Email</label>
-                            <div class="col-sm-7">
-                                <input type="email" class="p-2 form-control" id="email" name="email"
-                                    value="" autocomplete="off" autofocus>
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="password" class="col-sm-5 col-form-label">Password</label>
-                            <div class="col-sm-7">
-                                <input type="password" class="form-control" id="password" name="password">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-transparent">
-                        <button type="submit" class="btn btn-success w-100 m-2">Login Now</button>
-                        <a href="#" class="btn btn-danger w-100 m-2">Lupa Password?</a> 
-                    </div>
-                </form>
-
-
+        <div class="card p-4 m-auto" style="width: 30vw;">
+            <div class="card-header bg-transparent text-center">
+                <h5>{{ $name }}</h5>
             </div>
-        
+            <form action="{{ route('loginProses') }}" method="POST">
+                @csrf
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        <b>Oppss ...!</b> {{ session('error') }}
+                    </div>
+                @endif
+
+                <div class="card-body">
+                    <div class="mb-3 row">
+                        <label for="email" class="col-sm-5 col-form-label">Email</label>
+                        <div class="col-sm-7">
+                            <input type="email" class="p-2 form-control" id="email" name="email" value=""
+                                autocomplete="off" autofocus>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="password" class="col-sm-5 col-form-label">Password</label>
+                        <div class="col-sm-7">
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <button type="submit" class="btn btn-success w-100 m-2">Login Now</button>
+                    <a href="#" class="btn btn-danger w-100 m-2">Lupa Password?</a>
+                </div>
+            </form>
+
+
+        </div>
+
     </main>
 
 </body>

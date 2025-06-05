@@ -1,10 +1,15 @@
 @extends('pelanggan.layout.index')
 
 @section('content')
+@if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 @if ($best->count() < 1)
     <div class="container"></div>
 @else
-    <h1>Belum ada product...</h1>
     <h4 class="mt-5">Best Seller</h4>
     <div class="content mt-3 d-flex flex-lg-wrap gap-5 mb-5">
         
@@ -50,9 +55,14 @@
                     </div>
                     <div class="card-footer d-flex flex-row justify-content-between align-items-center">
                         <p class="m-0" style="font-size:16px font-weight:600">{{ number_format($p->harga) }}</p>
-                        <button class="btn btn-outline-primary" style="font-size:24px">
+                        <form action="{{route('addToCart')}}" method="POST">
+                            @csrf
+                            <input type="hidden" name="idProduct" value="{{$p->id}}">
+                            <button type="submit" class="btn btn-outline-primary" style="font-size:24px">
                             <i class="fa-solid fa-cart-plus"></i>
-                        </button>
+                            </button>
+                        </form>
+                        
                     </div>
                 </div>
             @endforeach

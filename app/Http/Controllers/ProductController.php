@@ -115,9 +115,9 @@ class ProductController extends Controller
         ];
 
         $data::where('id', $id)->update($field);
-        session()->flash('Berhasil', 'Data Berhasil Disimpan');
-        Alert::toast('Berhasil', 'Data berhasil disimpan');
+        session()->flash('berhasil_update', 'Update Barang Berhasil');
         return redirect()->route('product');
+
 
     }
 
