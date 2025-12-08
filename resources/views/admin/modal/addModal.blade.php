@@ -6,7 +6,10 @@
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ $title }}</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('addData') }}" enctype="multipart/form-data" method="POST">
+
+            {{-- onsubmit: disable tombol Save supaya tidak ke-klik dua kali --}}
+            <form action="{{ route('addData') }}" enctype="multipart/form-data" method="POST"
+                  onsubmit="this.querySelector('button[type=submit]').disabled = true;">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3 row">
@@ -16,16 +19,19 @@
                                 value="{{ $sku }}" readonly>
                         </div>
                     </div>
+
                     <div class="mb-3 row">
                         <label for="nameProduct" class="col-sm-5 col-form-label">Nama Product</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control" id="nameProduct" name="nama">
                         </div>
                     </div>
+
+                    {{-- TYPE PRODUCT (boleh pilih salib / alkitab / aksesoris) --}}
                     <div class="mb-3 row">
                         <label for="type" class="col-sm-5 col-form-label">Type Product</label>
                         <div class="col-sm-7">
-                            <select type="password" class="form-control" id="type" name="type">
+                            <select class="form-control" id="type" name="type">
                                 <option value="">Pilih Type</option>
                                 <option value="salib">Salib</option>
                                 <option value="alkitab">Alkitab</option>
@@ -33,40 +39,46 @@
                             </select>
                         </div>
                     </div>
+
+                    {{-- KATEGORI SALIB (subjenis) --}}
                     <div class="mb-3 row">
-                        <label for="kategori" class="col-sm-5 col-form-label">Nama Product</label>
+                        <label for="kategori" class="col-sm-5 col-form-label">Kategori</label>
                         <div class="col-sm-7">
-                            <select type="password" class="form-control" id="kategori" name="kategori">
+                            <select class="form-control" id="kategori" name="kategori">
                                 <option value="">Pilih Kategori</option>
                                 <option value="salibkayu">Salib Kayu</option>
                                 <option value="salibbesi">Salib Besi</option>
                                 <option value="salibcustom">Salib Custom</option>
+                                <option value="salibgantungan">Salib Gantungan</option>
+                                <option value="salibmeja">Salib Meja</option>
+                                <option value="salibdinding">Salib Dinding</option>
                             </select>
                         </div>
                     </div>
+
                     <div class="mb-3 row">
                         <label for="harga" class="col-sm-5 col-form-label">Harga Product</label>
                         <div class="col-sm-7">
                             <input type="number" class="form-control" id="harga" name="harga">
                         </div>
                     </div>
+
                     <div class="mb-3 row">
                         <label for="quantity" class="col-sm-5 col-form-label">Quantity</label>
                         <div class="col-sm-7">
                             <input type="number" class="form-control" id="quantity" name="quantity">
                         </div>
                     </div>
+
                     <div class="mb-3 row">
                         <label for="foto" class="col-sm-5 col-form-label">Foto Product</label>
                         <div class="col-sm-7">
-                        <img src="#" class="mb-2 preview" style="width:100px; display:none;">
+                            <img src="#" class="mb-2 preview" style="width:100px; display:none;">
                             <input type="file" class="form-control" accept=".png, .jpg, .jpeg" id="inputFoto"
                                 name="foto" onchange="previewImg()">
                         </div>
                     </div>
-                    
                 </div>
-
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -81,6 +93,8 @@
     function previewImg() {
         const fotoIn = document.querySelector('#inputFoto');
         const preview = document.querySelector('.preview');
+
+        if (!fotoIn.files[0]) return;
 
         preview.style.display = 'block';
 

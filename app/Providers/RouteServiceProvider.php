@@ -7,28 +7,33 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Support\Facades\URL;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * The path to the "home" route for your application.
-     *
-     * Typically, users are redirected here after authentication.
-     *
-     * @var string
-     */
     public const HOME = '/home';
 
-    /**
-     * Define your route model bindings, pattern filters, and other route configuration.
-     */
     public function boot(): void
     {
         $this->configureRateLimiting();
 
+        // ✔ Override link email agar menuju route customer.password.reset
+        ResetPassword::toMailUsing(function ($notifiable, $token) {
+            $url = url(route('customer.password.reset', [
+                'token' => $token,
+                'email' => $notifiable->email
+            ], false));
+
+            return (new \Illuminate\Notifications\Messages\MailMessage)
+                ->subject('Reset Password Account Anda')
+                ->line('Anda menerima email ini karena ada permintaan reset password.')
+                ->action('Reset Password', $url)
+                ->line('Jika Anda tidak meminta reset password, abaikan email ini.');
+        });
+
         $this->routes(function () {
-            Route::middleware('api')
-                ->prefix('api')
+            Route::middleware('api')->prefix('api')
                 ->group(base_path('routes/api.php'));
 
             Route::middleware('web')
@@ -36,9 +41,6 @@ class RouteServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Configure the rate limiters for the application.
-     */
     protected function configureRateLimiting(): void
     {
         RateLimiter::for('api', function (Request $request) {

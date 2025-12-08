@@ -98,5 +98,16 @@
                 }
             });
         });
+        // edit user
+    $('#editUser').click( function(){
+     $.ajax({
+                url: '{{ route('addModalUser') }}',
+                method: 'GET',
+                success: function(response) {
+                    $('.tampilData').html(response).show();
+                    $('#userTambah').modal('show');
+                }
+    });
+});
     </script>
 @endsection

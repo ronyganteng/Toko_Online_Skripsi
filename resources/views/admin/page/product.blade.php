@@ -2,33 +2,51 @@
 
 @section('content')
 
-@if (session('berhasil_update') || session('Berhasil'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('berhasil_update') ?? session('Berhasil') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
+    @if (session('berhasil_update') || session('Berhasil'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('berhasil_update') ?? session('Berhasil') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-
+    {{-- FILTER TANGGAL --}}
     <div class="card mb-1">
         <div class="card-body d-flex flex-row justify-content-between">
             <div class="filter d-flex flex-lg-row gap-3">
-                <input type="date" class="form-control" placeholder="tgl_awal">
-                <input type="date" class="form-control" placeholder="tgl_akhir">
-                <button class="btn btn-primary">Filter</button>
+                <form action="{{ route('product') }}" method="GET" class="d-flex flex-lg-row gap-3">
+                    <input type="date" class="form-control" placeholder="tgl_awal"
+                           name="tgl_awal" value="{{ request('tgl_awal') }}">
+                    <input type="date" class="form-control" placeholder="tgl_akhir"
+                           name="tgl_akhir" value="{{ request('tgl_akhir') }}">
+                    <button class="btn btn-primary" type="submit">Filter</button>
+                </form>
             </div>
-
         </div>
     </div>
-    <div class="card rounded-full">
-        <div class="card-header bg-transparent d-flex justify-content-between">
 
-            <button class="btn btn-info " id="addData">
-                <i class="fa fa-plus">
-                    <span>Tambah Product</span>
-                </i>
+    <div class="card rounded-full">
+        <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+
+            {{-- TOMBOL TAMBAH --}}
+            <button class="btn btn-info" id="addData">
+                <i class="fa fa-plus"></i>
+                <span>Tambah Product</span>
             </button>
-            <input type="text" class="form-control w-25" placeholder="Search....">
+
+            {{-- SEARCH + CARI --}}
+            <form action="{{ route('product') }}" method="GET"
+                  class="d-flex align-items-center" style="max-width: 350px; width: 100%;">
+                <input type="hidden" name="tgl_awal" value="{{ request('tgl_awal') }}">
+                <input type="hidden" name="tgl_akhir" value="{{ request('tgl_akhir') }}">
+
+                <input type="text"
+                       name="q"
+                       class="form-control"
+                       placeholder="Search...."
+                       value="{{ request('q') }}">
+
+                <button class="btn btn-primary ms-2" type="submit">Cari</button>
+            </form>
 
         </div>
 
@@ -54,7 +72,7 @@
                         </tr>
                     @else
                         @foreach ($data as $y => $x)
-                        <tr class="align-middle">
+                            <tr class="align-middle">
                                 <td>{{ ++$y }}</td>
                                 <td>
                                     <img src="{{ asset('storage/product/' . $x->foto) }}" style="width: 100px">
@@ -66,20 +84,29 @@
                                 <td>{{ $x->harga }}</td>
                                 <td>{{ $x->quantity }}</td>
                                 <td>
-                                    <input type="hidden" id="sku" value="{{$x->sku}}">
-                                    <button class="btn btn-success" data-id="{{ $x->id }}">
+                                    {{-- EDIT --}}
+                                    <button class="btn btn-success btn-edit" data-id="{{ $x->id }}">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-danger">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                        </tr>
-                    @endforeach
-                @endif
 
+                                    {{-- DELETE --}}
+                                    <form action="{{ route('product.destroy', $x->id) }}"
+                                          method="POST"
+                                          class="d-inline"
+                                          onsubmit="return confirm('Yakin ingin menghapus produk ini?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-danger">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
+
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <div>
                     <strong>Menampilkan {{ $data->firstItem() }} - {{ $data->lastItem() }} dari total
@@ -90,38 +117,51 @@
                 </div>
             </div>
 
+            {{-- TEMPAT MODAL AJAX --}}
             <div class="tampilData" style="display: none;"></div>
             <div class="tampilEditData" style="display: none;"></div>
 
             <script>
-                $('#addData').click(function() {
-                    $.ajax({
-                        url: '{{ route('addModal') }}',
-                        method: 'GET',
-                        success: function(response) {
-                            $('.tampilData').html(response).show();
-                            $('#addModal').modal('show');
-                        }
-                    });
-                });
+    // BUKA MODAL TAMBAH
+    $('#addData').click(function() {
+        $.ajax({
+            url: '{{ route('addModal') }}',
+            method: 'GET',
+            success: function(response) {
+                $('.tampilData').html(response).show();
+                $('#addModal').modal('show');
+            },
+            error: function(xhr) {
+                console.error(xhr.responseText);
+                alert('Gagal membuka form tambah product');
+            }
+        });
+    });
 
-                // Gunakan event delegation agar bisa menangkap tombol dinamis juga
-                $(document).on('click', '.btn-success', function(e) {
-                    e.preventDefault();
+    // BUKA MODAL EDIT
+    $(document).on('click', '.btn-edit', function(e) {
+        e.preventDefault();
 
-                    var id = $(this).data('id');
+        var id = $(this).data('id');
 
-                    $.ajax({
-                        url: "{{ route('editModal', ['id' => ':id']) }}".replace(':id', id),
-                        method: 'GET',
-                        success: function(response) {
-                            $('.tampilEditData').html(response).show();
-                            $('#editModal').modal('show');
-                        },
+        $.ajax({
+            // PENTING: jangan pakai route('editModal', [':id'])
+            url: '{{ url("/admin/editModal") }}/' + id,
+            method: 'GET',
+            success: function(response) {
+                $('.tampilEditData').html(response).show();
+                $('#editModal').modal('show');
+            },
+            error: function(xhr) {
+                console.error(xhr.responseText);
+                alert('Gagal mengambil data product untuk edit');
+            }
+        });
+    });
+</script>
 
-                    });
-                });
-            </script>
-        @endsection
+        </div>
+    </div>
 
-
+@endsection
+ 
