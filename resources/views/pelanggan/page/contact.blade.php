@@ -1,76 +1,163 @@
 @extends('pelanggan.layout.index')
 
 @section('content')
-    <div class="row mt-4 align-items-center">
-        <div class="col-md-6">
-            <div class="content-text">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Enim molestias aut eligendi ea cumque iusto
-                repellat consequatur velit omnis, fugit inventore esse qui quasi, laborum iste repellendus perferendis
-                possimus sed assumenda dolore, earum dolorem adipisci cum alias? Perferendis nihil minima aperiam rem
-                expedita illo sed facere suscipit recusandae sequi illum reprehenderit incidunt animi ipsam vel sunt
-                laboriosam, magni, deleniti quasi at error earum odit? Iste nisi soluta nostrum mollitia cupiditate sed
-                expedita odio blanditiis consectetur ducimus! Hic eius expedita corrupti magni eveniet maxime nobis atque
-                tempora aliquam aspernatur, consectetur possimus a voluptatibus in nemo corporis est sed blanditiis natus.
-                Repudiandae deserunt quo eius doloremque! Eius aperiam nemo quibusdam tempore odit! Molestias voluptatum
-                delectus cupiditate nam aliquid laboriosam in. Magni, eos!
-            </div>
-        </div>
-        <div class="col-md-6">
-            <img src="{{ asset('assets/images/contact.jpg') }}" style="width: 90%" alt="">
-        </div>
-    </div>
-    <div class="d-flex justify-content-lg-between mt-5">
-        <div class="d-flex flex align-items-content gap-4">
-            <i class="fa fa-users fa-2x"></i>
-            <p class="m-0 fs-5"> +300 Pelanggan</p>
-        </div>
-        <div class="d-flex flex align-items-content gap-4">
-            <i class="fa fa-home fa-2x"></i>
-            <p class="m-0 fs-5"> +300 Seller</p>
-        </div>
-        <div class="d-flex flex align-items-content gap-4">
-            <i class="fa fa-cross fa-2x"></i>
-            <p class="m-0 fs-5"> +300 Salib</p>
-        </div>
-    </div>
+<div class="container py-4">
 
-    <h4 class="text-center mt-md-5 mb-md-5">Contact Us</h4>
-    <hr>
-    <div class="row mb-md-5">
-        <div class="col-md-5">
-            <div class="bg-secondary" style="width: 100%; height: 50vh; border-radius:10px;"></div>
-        </div>
-        <div class="col-md-7">
-            <div class="card">
-                <div class="card-header text-center">
-                    <h4>Kritik dan Saran</h4>
+    {{-- HERO SECTION --}}
+    <div class="row align-items-center mb-4">
+        <div class="col-md-7 mb-3 mb-md-0">
+            <div class="contact-tag mb-2">
+                <i class="fa-solid fa-envelope-open-text"></i>
+                <span>Hubungi Kami</span>
+            </div>
+            <div class="contact-hero-heading mb-1">
+                Contact Us
+            </div>
+            <p class="contact-hero-text">
+                Punya pertanyaan tentang produk, pesanan, atau ingin kerja sama dengan
+                St. Benedictus? Silakan kirim pesan, kami akan dengan senang hati membantu.
+            </p>
+
+            <div class="contact-stats">
+                <div class="contact-stat-card">
+                    <div class="icon-wrap">
+                        <i class="fa fa-users"></i>
+                    </div>
                     <div>
-                        <div class="card-body">
-                            <p class="p-0 mb-5 text-lg-center">Masukan Kritik dan Saran Anda kepada Web kami ini agar kami
-                                dapat memberikan apa yang menjadi kebutuhan anda dan kami dapat berkembang
-                                lebih baik lagi.
-                            </p>
-                            <div class="mb-3 row">
-                                <label for="email" class="col-sm-2 col-form-label">Email</label>
-                                <div class="col-sm-10">
-                                    <input type="text" readonly class="form-control" id="email" value=""
-                                        placeholder="Masukan E-mail Anda">
-                                </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label for="pesan" class="col-sm-2 col-form-label">Pesan</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="pesan"
-                                        placeholder="Masukan Pesan Anda">
-                                </div>
-                            </div>
-                            <button class="btn btn-primary mt-4 w-100">
-                                Kirim Pesan Anda
-                            </button>
-                        </div>
+                        <p class="stat-number">+300</p>
+                        <p class="stat-label">Pelanggan Puas</p>
+                    </div>
+                </div>
+
+                <div class="contact-stat-card">
+                    <div class="icon-wrap">
+                        <i class="fa fa-home"></i>
+                    </div>
+                    <div>
+                        <p class="stat-number">+300</p>
+                        <p class="stat-label">Produk Tersedia</p>
+                    </div>
+                </div>
+
+                <div class="contact-stat-card">
+                    <div class="icon-wrap">
+                        <i class="fa fa-cross"></i>
+                    </div>
+                    <div>
+                        <p class="stat-number">Setiap Hari</p>
+                        <p class="stat-label">Melayani dengan Hati</p>
                     </div>
                 </div>
             </div>
         </div>
+
+        {{-- Bisa pakai ilustrasi / foto --}}
+        <div class="col-md-5 text-center">
+            <img src="{{ asset('assets/images/contact.jpg') }}"
+                 alt="Contact St. Benedictus"
+                 class="img-fluid rounded-4 shadow-sm">
+        </div>
     </div>
+
+    {{-- MAP + FORM --}}
+    <div class="row contact-wrapper mb-5">
+        {{-- MAP LOKASI TOKO --}}
+        <div class="col-md-5 mb-4 mb-md-0">
+            <div class="contact-map-box">
+                <div id="contactMap"></div>
+            </div>
+        </div>
+
+        {{-- FORM KRITIK & SARAN --}}
+        <div class="col-md-7">
+            <div class="card contact-card">
+                <div class="card-header text-center py-3">
+                    <h4 class="mb-1">Kritik dan Saran</h4>
+                    <p class="mb-0 contact-description">
+                        Masukan Anda membantu kami menghadirkan pengalaman belanja rohani
+                        yang lebih baik lagi.
+                    </p>
+                </div>
+                <div class="card-body">
+
+                    <form action="#" method="POST">
+                        @csrf
+                        <div class="mb-3 row align-items-center">
+                            <label for="email" class="col-sm-3 col-form-label contact-label">
+                                Email
+                            </label>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="email"
+                                       name="email" placeholder="Masukan E-mail Anda">
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row align-items-start">
+                            <label for="pesan" class="col-sm-3 col-form-label contact-label">
+                                Pesan
+                            </label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" id="pesan" name="pesan"
+                                          rows="4" placeholder="Tulis kritik, saran, atau pertanyaan Anda di sini..."></textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-contact-send mt-3 w-100">
+                            Kirim Pesan Anda
+                        </button>
+                    </form>
+
+                    <div class="mt-3 text-center" style="font-size: 13px; color:#777;">
+                        Atau hubungi kami via WhatsApp:
+                        <strong>08xx-xxxx-xxxx</strong>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
+
+@push('styles')
+<link rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""/>
+@endpush
+
+@push('scripts')
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Koordinat toko (contoh: Surabaya)
+    const tokoLat = -7.2575;
+    const tokoLng = 112.7521;
+
+    const map = L.map('contactMap').setView([tokoLat, tokoLng], 14);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const marker = L.marker([tokoLat, tokoLng]).addTo(map);
+    marker.bindPopup(`
+        <strong>St. Benedictus Store</strong><br>
+        Surabaya, Indonesia<br>
+        <span style="font-size:12px;">Klik untuk melihat lebih dekat.</span>
+    `).openPopup();
+
+    // Tambahan lingkaran lembut sekitar toko
+    L.circle([tokoLat, tokoLng], {
+        radius: 300,
+        color: '#b71c1c',
+        fillColor: '#ef9a9a',
+        fillOpacity: 0.2
+    }).addTo(map);
+});
+</script>
+@endpush

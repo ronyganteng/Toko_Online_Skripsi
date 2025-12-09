@@ -1,40 +1,52 @@
- <div class="d-flex justify-content-between gap-5 pt-4 mt-5">
-              <div class="title-left w-25">
-                <div class="header-title fs-4 mb-2 font-weight-bolder">
+<footer class="site-footer">
+    <div class="container">
+
+        <div class="footer-cols">
+            {{-- KOLOM KIRI --}}
+            <div class="title-left" style="min-width: 220px; max-width: 320px;">
+                <div class="footer-brand">
                     ST Benedictus
                 </div>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Qui, perspiciatis. Dolores culpa quisquam aut. At, quidem quis neque fuga laborum deleniti libero harum molestiae obcaecati esse corrupti quibusdam rerum iure!</p>
-              </div>
-              <div class="tittle-middle w-25">
-                <div class="header-title fs-4 mb-2 font-weight-bolder">
-                  Tentang Kami
+                <p>
+                    Toko devosi & perlengkapan rohani untuk menemani doa,
+                    pelayanan, dan hadiah penuh makna bagi orang-orang yang kamu kasihi.
+                </p>
+            </div>
+
+            {{-- KOLOM TENGAH --}}
+            <div class="tittle-middle" style="min-width: 220px; max-width: 320px;">
+                <div class="footer-title">
+                    Tentang Kami
                 </div>
-                <ul class="list-unstyled">
+                <ul class="footer-list">
                   <li>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil in molestias vel dolorum esse atque?
-                    </p>
+                    Tersedia salib, rosario, aksesoris rohani, dan berbagai
+                    perlengkapan devosi lainnya.
                   </li>
-                  <li>
-                    <p>081377322837823</p>
-                  </li>
-                  <li>
-                    p90209190390129032
-                  </li>
+                  <li>WhatsApp: <strong>08xx-xxxx-xxxx</strong></li>
+                  <li>Rekening: <strong>p90209190390129032</strong></li>
+                  <li>Lokasi: Surabaya, Indonesia</li>
                 </ul>
               </div>
-              <div class="title-sosmed w-30 ">
-                <div class="header-title fs-4 mb-2 font-weight-bolder">
+
+              {{-- KOLOM SOSMED --}}
+              <div class="title-sosmed" style="min-width: 220px;">
+                <div class="footer-title">
                   Social Media
                 </div>
-                <div class="sosmed d-flex gap-3">
+                <p class="mb-2">
+                    Ikuti kami untuk info promo & produk terbaru.
+                </p>
+                <div class="footer-sosmed d-flex gap-3">
                   <i class="fa-brands fa-instagram fa-2x"></i>
                   <i class="fa-brands fa-facebook fa-2x"></i>
                   <i class="fa-brands fa-whatsapp fa-2x"></i>
                 </div>
               </div>
-            </div>
-            <div class="text-center p-lg-4 mt-3 ">
-              Copy Right @ St. Benedictus
-              <i></i>
-            </div>
+        </div>
+
+        <div class="footer-bottom mt-3">
+            Copy Right &copy; {{ date('Y') }} St. Benedictus
+        </div>
+    </div>
+</footer>

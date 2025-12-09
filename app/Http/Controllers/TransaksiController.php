@@ -13,80 +13,104 @@ use RealRashid\SweetAlert\Facades\Alert;
 class TransaksiController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Helper: ID pemilik keranjang (customer login / guest)
+     */
+    protected function getCartOwnerId()
+    {
+        // kalau customer sudah login → pakai id customer
+        if (auth('customer')->check()) {
+            return auth('customer')->id();
+        }
+
+        // kalau belum login → pakai guest
+        return 'guest123';
+    }
+
+    /**
+     * HALAMAN HOME
      */
     public function index()
     {
-        $best = product::where('quantity_out','>=',5)->get();
-        $data = product::paginate(8);
-        $countKeranjang = TblCart::where(['idUser'=>'guest123', 'status' => 0])->count();
+        $best  = product::where('quantity_out', '>=', 5)->get();
+        $data  = product::paginate(8);
+
+        $ownerId = $this->getCartOwnerId();
+
+        $countKeranjang = TblCart::where('idUser', $ownerId)
+            ->where('status', 0)
+            ->count();
+
         return view('pelanggan.page.home', [
-            'title'     => 'Home',
-            'data'      => $data,
-            'best'      => $best,
-            'count'     => $countKeranjang,
+            'title' => 'Home',
+            'data'  => $data,
+            'best'  => $best,
+            'count' => $countKeranjang,
         ]);
     }
-    
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function addToCart(Request $request)
-    {
-        $idProduct = $request->input('idProduct');
-        $product = product::find($idProduct);
-        $db = new tblCart;
+   public function addToCart(Request $request)
+{
+    // support banyak nama field: id_barang (baru) / idProduct (lama)
+    $idProduct = $request->input('id_barang') 
+              ?? $request->input('idProduct') 
+              ?? $request->input('id_product');
 
-        $field = [
-            'idUser'  =>'guest123',
-            'id_barang' => $idProduct,
-            'qty'=> 1,
-            'price' =>$product->harga,
-        ];
-
-        $db::create($field);
-        Alert::toast('Keranjang berhasil Ditambah' , 'info');
-        return redirect('/');
+    if (!$idProduct) {
+        Alert::error('Gagal', 'Produk tidak diketahui');
+        return redirect()->back();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreTransaksiRequest $request)
-    {
-        //
+    $product = product::find($idProduct);
+
+    if (!$product) {
+        Alert::error('Gagal', 'Produk tidak ditemukan');
+        return redirect()->back();
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Transaksi $transaksi)
-    {
-        //
-    }
+    // pemilik keranjang (customer / guest)
+    $ownerId = auth('customer')->check()
+        ? auth('customer')->id()
+        : 'guest123';
+
+    // kalau mau support qty dari form, ambil kalau ada, default 1
+    $qty = $request->input('qty', 1);
+
+    TblCart::create([
+        'idUser'    => $ownerId,
+        'id_barang' => $idProduct,
+        'qty'       => $qty,
+        'price'     => $product->harga,
+        'status'    => 0,
+    ]);
+
+    Alert::toast('Produk ditambahkan ke keranjang', 'success');
+    return redirect()->back();
+}
+
 
     /**
-     * Show the form for editing the specified resource.
+     * HALAMAN KERANJANG
      */
-    public function edit(Transaksi $transaksi)
+    public function cart()
     {
-        //
+        $ownerId = $this->getCartOwnerId();
+
+        $data = TblCart::with('product')
+            ->where('idUser', $ownerId)
+            ->where('status', 0)
+            ->get();
+
+        return view('pelanggan.page.transaksi', [
+            'title' => 'Keranjang',
+            'data'  => $data,
+            'count' => $data->count(),
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateTransaksiRequest $request, Transaksi $transaksi)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Transaksi $transaksi)
-    {
-        //
-    }
+    // sisanya biarin kosong dulu
+    public function store(StoreTransaksiRequest $request) {}
+    public function show(Transaksi $transaksi) {}
+    public function edit(Transaksi $transaksi) {}
+    public function update(UpdateTransaksiRequest $request, Transaksi $transaksi) {}
+    public function destroy(Transaksi $transaksi) {}
 }

@@ -43,6 +43,8 @@ class ProductController extends Controller
         ]);
     }
 
+    
+
     public function show($id)
 {
     $data = product::findOrFail($id);   // gunakan model product kamu
@@ -103,6 +105,8 @@ class ProductController extends Controller
         ->with('Berhasil', 'Barang berhasil ditambahkan.');
 }
 
+// app/Http/Controllers/ProductController.php
+
 public function update(Request $request, $id)
 {
     $request->validate([
@@ -114,30 +118,32 @@ public function update(Request $request, $id)
         'quantity' => 'required|numeric',
     ]);
 
-    $data = product::findOrFail($id);
+    $product = product::findOrFail($id);
 
-    if ($request->file('foto')) {
+    $product->sku          = $request->sku;
+    $product->nama_product = $request->nama;
+    $product->type         = $request->type;        // salib / patung / aksesoris
+    $product->kategory     = $request->kategori;    // salibkayu / rosario / dll
+    $product->harga        = $request->harga;
+    $product->quantity     = $request->quantity;
+    $product->discount     = 10 / 100;
+    $product->is_active    = 1;
+
+    // kalau user upload foto baru, ganti
+    if ($request->hasFile('foto')) {
         $photo    = $request->file('foto');
         $filename = date('Ymd') . '_' . $photo->getClientOriginalName();
         $photo->move(public_path('storage/product'), $filename);
-        $data->foto = $filename;
+        $product->foto = $filename;
     }
 
-    $data->sku          = $request->sku;
-    $data->nama_product = $request->nama;
-    $data->type         = $request->type;
-    $data->kategory     = $request->kategori;
-    $data->harga        = $request->harga;
-    $data->quantity     = $request->quantity;
-    $data->discount     = 10/100;
-    $data->is_active    = 1;
-    $data->save();
+    $product->save();
 
-    // NOTIFIKASI UPDATE
     return redirect()
         ->route('product')
         ->with('berhasil_update', 'Barang berhasil disimpan.');
 }
+
 
 public function destroy($id)
 {

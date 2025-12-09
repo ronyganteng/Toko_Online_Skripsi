@@ -3,61 +3,221 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    /* background-color: rgb(197, 197, 197);*/
 }
+
+/* ========= LAYOUT DASAR ========= */
 main{
     background-color: rgba(197, 197, 197, 0.873);
     min-height: 100vh;
     overflow: hidden;
 }
-/*.icon-nav{
-    position: relative;
-    color: #FFFFFF8C;
-}*/
-    
-.circle{
-    position : absolute;
-    top: 0px;
-    right: 0px;
-    border-radius: 50%;
-    background-color: red;
-    color: white;
-    font-size: 12px;
-    padding: 2px 5px;
-}
-/*.icon-nav:hover{
-    color:white;
-} */
-.notif{
-    position: relative;
-    display: inline-block;
-}
-.fa-bag-shopping{
-    font-size: 24px;
-    color: rgb(213, 212, 212);
-
-}
-.fa-bag-shopping:hover{
-    color: white;
-}
 
 section{
     min-height: 100vh;
 }
-/* style footer */
-footer{
-    background-color: brown;
+
+/* ========= NAVBAR ========= */
+
+.navbar-main {
+    background: linear-gradient(90deg, #5d1010, #b71c1c);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.navbar-brand-stb {
+    font-weight: 800;
+    letter-spacing: .04em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff !important;
+}
+
+.navbar-brand-stb span.logo-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.navbar-brand-stb span.logo-text-small {
+    font-size: 11px;
+    display: block;
+    font-weight: 400;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    opacity: 0.85;
+}
+
+/* Link navbar */
+.navbar-nav .nav-link {
+    color: #fceae8;
+    font-weight: 500;
+    font-size: 14px;
+    position: relative;
+    padding-bottom: 6px;
+}
+
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link:hover {
+    color: #ffffff;
+}
+
+.navbar-nav .nav-link.active::after,
+.navbar-nav .nav-link:hover::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 0;
+    height: 3px;
+    border-radius: 999px;
+    background: #ffd54f;
+}
+
+/* Icon keranjang */
+.icon-nav {
+    position: relative;
+    display: inline-block;
+}
+
+.fa-bag-shopping{
+    font-size: 24px;
+    color: rgb(235, 233, 233);
+    transition: transform .15s ease, color .15s ease;
+}
+.fa-bag-shopping:hover{
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* Badge jumlah keranjang */
+.circle {
+    position: absolute;
+    top: -6px;
+    right: -12px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: #ffca28;
+    color: #5d1010;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    box-shadow: 0 0 0 2px #5d1010;
+}
+
+/* Tombol login/register di navbar */
+.btn-nav-auth {
+    border-radius: 999px;
+    padding-inline: 16px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ========= FOOTER ========= */
+
+.site-footer{
+    background-color: #4a0f0f;
     color: white;
     position: static;
     bottom: 0;
+    padding-top: 40px;
+    padding-bottom: 20px;
+    margin-top: 40px;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.25);
 }
 
-/* sidebar */
+.site-footer .footer-cols {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.site-footer .footer-brand {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    margin-bottom: 8px;
+}
+
+.site-footer p {
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+.site-footer .footer-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.site-footer .footer-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 40px;
+    height: 2px;
+    border-radius: 999px;
+    background: #ffca28;
+}
+
+.site-footer .footer-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.site-footer .footer-list li {
+    margin-bottom: 4px;
+    font-size: 13px;
+}
+
+.site-footer .footer-sosmed i {
+    cursor: pointer;
+    transition: transform .15s ease, color .15s ease;
+    color: #ffecb3;
+}
+
+.site-footer .footer-sosmed i:hover {
+    transform: translateY(-2px) scale(1.05);
+    color: #ffffff;
+}
+
+.site-footer .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.18);
+    margin-top: 24px;
+    padding-top: 10px;
+    font-size: 12px;
+    color: #ffccbc;
+    text-align: center;
+}
+
+/* RESPONSIVE FOOTER */
+@media (max-width: 767.98px) {
+    .site-footer .footer-cols {
+        flex-direction: column;
+        gap: 24px;
+    }
+}
+
+/* ========= SIDEBAR ADMIN (PUNYAMU YANG LAMA) ========= */
+
 .sidebar{
     position: fixed;
     width:250px;
     height: 97vh;
-    
 }
 .sidebar a{
     text-decoration: none;
@@ -67,16 +227,157 @@ footer{
     list-style: none;
     padding: 10px 5px;
 }
-
 .sidebar li:hover{
     background-color: rgb(215, 213, 213);
     border-radius: 10px;
     margin: 0;
-
 }
 .sidebar h5{
     font-size: 24px;
     font-weight: 500;
     color: white;
     text-align: center;
+}
+/* ========= CONTACT PAGE ========= */
+
+.contact-hero-title {
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #5d1010;
+    font-size: 14px;
+}
+
+.contact-hero-heading {
+    font-weight: 800;
+    font-size: 32px;
+    color: #2b2b2b;
+}
+
+.contact-hero-text {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.7;
+    max-width: 520px;
+}
+
+.contact-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(93,16,16,0.08);
+    color: #5d1010;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+}
+
+.contact-stats {
+    margin-top: 24px;
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.contact-stat-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 12px 16px;
+    min-width: 150px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contact-stat-card .icon-wrap {
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    background: rgba(183,28,28,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #b71c1c;
+}
+
+.contact-stat-card .stat-number {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 0;
+}
+
+.contact-stat-card .stat-label {
+    font-size: 12px;
+    margin-bottom: 0;
+    color: #666;
+}
+
+/* box map + form */
+
+.contact-wrapper {
+    margin-top: 32px;
+}
+
+.contact-map-box {
+    width: 100%;
+    height: 50vh;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+    background: #646f79;
+}
+
+#contactMap {
+    width: 100%;
+    height: 100%;
+}
+
+/* kartu form */
+
+.contact-card {
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+    border: none;
+}
+
+.contact-card .card-header {
+    border-radius: 16px 16px 0 0;
+    border-bottom: none;
+    background: linear-gradient(90deg, #ffffff, #ffe0b2);
+}
+
+.contact-card h4 {
+    font-weight: 700;
+}
+
+.contact-description {
+    font-size: 14px;
+    color: #555;
+}
+
+.contact-label {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.btn-contact-send {
+    background: linear-gradient(90deg,#005bff,#1e88ff);
+    border: none;
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    padding-block: 10px;
+}
+
+.btn-contact-send:hover {
+    opacity: .92;
+}
+
+/* Leaflet map override biar nyatu sama desain */
+.leaflet-container {
+    font-family: 'Poppins', sans-serif;
 }

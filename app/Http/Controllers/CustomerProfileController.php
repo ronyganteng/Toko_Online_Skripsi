@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\TblCart;                      // 🔥 TAMBAH INI
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -15,9 +16,16 @@ class CustomerProfileController extends Controller
     {
         $customer = Auth::guard('customer')->user();
 
+        // 🔥 hitung keranjang pakai helper di Controller
+        $userId        = $this->getCartUserId();
+        $countKeranjang = TblCart::where([
+            'idUser' => $userId,
+            'status' => 0,
+        ])->count();
+
         return view('pelanggan.page.profile', [
             'title'    => 'Profil Saya',
-            'count'    => 0, // kalau mau pakai cart badge
+            'count'    => $countKeranjang,
             'customer' => $customer,
         ]);
     }
@@ -27,9 +35,15 @@ class CustomerProfileController extends Controller
     {
         $customer = Auth::guard('customer')->user();
 
+        $userId        = $this->getCartUserId();
+        $countKeranjang = TblCart::where([
+            'idUser' => $userId,
+            'status' => 0,
+        ])->count();
+
         return view('pelanggan.page.profile-edit', [
             'title'    => 'Edit Profil',
-            'count'    => 0,
+            'count'    => $countKeranjang,
             'customer' => $customer,
         ]);
     }
@@ -65,8 +79,8 @@ class CustomerProfileController extends Controller
             $photo = $request->file('photo');
 
             // hapus foto lama kalau ada
-            if ($customer->photo && File::exists(public_path('storage/customer/'.$customer->photo))) {
-                File::delete(public_path('storage/customer/'.$customer->photo));
+            if ($customer->photo && File::exists(public_path('storage/customer/' . $customer->photo))) {
+                File::delete(public_path('storage/customer/' . $customer->photo));
             }
 
             $filename = date('YmdHis') . '_' . $photo->getClientOriginalName();

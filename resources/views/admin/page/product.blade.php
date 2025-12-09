@@ -33,7 +33,7 @@
                 <span>Tambah Product</span>
             </button>
 
-            {{-- SEARCH + CARI --}}
+            {{-- SEARCH --}}
             <form action="{{ route('product') }}" method="GET"
                   class="d-flex align-items-center" style="max-width: 350px; width: 100%;">
                 <input type="hidden" name="tgl_awal" value="{{ request('tgl_awal') }}">
@@ -59,30 +59,42 @@
                         <th>Date In</th>
                         <th>SKU</th>
                         <th>Product Name</th>
-                        <th>Category</th>
+                        <th>Type</th>       {{-- <=== baru --}}
+                        <th>Category</th>   {{-- <=== baru, khusus kategory --}}
                         <th>Price</th>
-                        <th>Stock </th>
+                        <th>Stock</th>
                         <th>#</th>
                     </tr>
                 </thead>
                 <tbody>
                     @if ($data->isEmpty())
                         <tr class="text-center">
-                            <td colspan="9">Belum ada barang</td>
+                            <td colspan="10">Belum ada barang</td>
                         </tr>
                     @else
                         @foreach ($data as $y => $x)
                             <tr class="align-middle">
-                                <td>{{ ++$y }}</td>
+                                <td>{{ $data->firstItem() + $y }}</td>
+
                                 <td>
                                     <img src="{{ asset('storage/product/' . $x->foto) }}" style="width: 100px">
                                 </td>
+
                                 <td>{{ $x->created_at }}</td>
                                 <td>{{ $x->sku }}</td>
+
                                 <td>{{ $x->nama_product }}</td>
-                                <td>{{ $x->type . ' ' . $x->kategory }}</td>
-                                <td>{{ $x->harga }}</td>
+
+                                {{-- TYPE dipisah --}}
+                                <td>{{ ucfirst($x->type) }}</td>
+
+                                {{-- CATEGORY khusus dari field kategory --}}
+                                <td>{{ $x->kategory }}</td>
+
+                                <td>Rp. {{ number_format($x->harga, 0, ',', '.') }}</td>
+
                                 <td>{{ $x->quantity }}</td>
+
                                 <td>
                                     {{-- EDIT --}}
                                     <button class="btn btn-success btn-edit" data-id="{{ $x->id }}">
@@ -109,8 +121,10 @@
 
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <div>
-                    <strong>Menampilkan {{ $data->firstItem() }} - {{ $data->lastItem() }} dari total
-                        {{ $data->total() }} data</strong>
+                    <strong>
+                        Menampilkan {{ $data->firstItem() }} - {{ $data->lastItem() }}
+                        dari total {{ $data->total() }} data
+                    </strong>
                 </div>
                 <div>
                     {{ $data->links('pagination::bootstrap-5') }}
@@ -122,46 +136,44 @@
             <div class="tampilEditData" style="display: none;"></div>
 
             <script>
-    // BUKA MODAL TAMBAH
-    $('#addData').click(function() {
-        $.ajax({
-            url: '{{ route('addModal') }}',
-            method: 'GET',
-            success: function(response) {
-                $('.tampilData').html(response).show();
-                $('#addModal').modal('show');
-            },
-            error: function(xhr) {
-                console.error(xhr.responseText);
-                alert('Gagal membuka form tambah product');
-            }
-        });
-    });
+                // BUKA MODAL TAMBAH
+                $('#addData').click(function() {
+                    $.ajax({
+                        url: '{{ route('addModal') }}',
+                        method: 'GET',
+                        success: function(response) {
+                            $('.tampilData').html(response).show();
+                            $('#addModal').modal('show');
+                        },
+                        error: function(xhr) {
+                            console.error(xhr.responseText);
+                            alert('Gagal membuka form tambah product');
+                        }
+                    });
+                });
 
-    // BUKA MODAL EDIT
-    $(document).on('click', '.btn-edit', function(e) {
-        e.preventDefault();
+                // BUKA MODAL EDIT
+                $(document).on('click', '.btn-edit', function(e) {
+                    e.preventDefault();
 
-        var id = $(this).data('id');
+                    var id = $(this).data('id');
 
-        $.ajax({
-            // PENTING: jangan pakai route('editModal', [':id'])
-            url: '{{ url("/admin/editModal") }}/' + id,
-            method: 'GET',
-            success: function(response) {
-                $('.tampilEditData').html(response).show();
-                $('#editModal').modal('show');
-            },
-            error: function(xhr) {
-                console.error(xhr.responseText);
-                alert('Gagal mengambil data product untuk edit');
-            }
-        });
-    });
-</script>
+                    $.ajax({
+                        url: '{{ url("/admin/editModal") }}/' + id,
+                        method: 'GET',
+                        success: function(response) {
+                            $('.tampilEditData').html(response).show();
+                            $('#editModal').modal('show');
+                        },
+                        error: function(xhr) {
+                            console.error(xhr.responseText);
+                            alert('Gagal mengambil data product untuk edit');
+                        }
+                    });
+                });
+            </script>
 
         </div>
     </div>
 
 @endsection
- 

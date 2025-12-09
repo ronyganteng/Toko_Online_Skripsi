@@ -12,11 +12,12 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\CustomerPasswordController;
 use App\Http\Controllers\CustomerProfileController;
+use App\Http\Controllers\ShopController;
 
 // ================== HALAMAN UMUM ==================
 Route::get('/', [TransaksiController::class, 'index'])->name('home');
 Route::post('/addToCart', [TransaksiController::class, 'addToCart'])->name('addToCart');
-Route::get('/shop', [\App\Http\Controllers\Controller::class, 'shop'])->name('shop');
+Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/contact', [\App\Http\Controllers\Controller::class, 'contact'])->name('contact');
 
 // ================== AUTH CUSTOMER ==================
@@ -58,10 +59,13 @@ Route::middleware('auth:customer')->group(function () {
         ->name('customer.profile.password');
 
     // TRANSAKSI & CHECKOUT
-    Route::get('/transaksi', [\App\Http\Controllers\Controller::class, 'transaksi'])->name('transaksi');
+    Route::get('/transaksi', [TransaksiController::class, 'cart'])->name('transaksi');
     Route::get('/checkout', [\App\Http\Controllers\Controller::class, 'checkout'])->name('checkout');
     Route::post('/checkout/proses/{id}', [\App\Http\Controllers\Controller::class, 'prosesCheckout'])->name('checkout.product');
     Route::post('/checkout/prosesPembayaran', [\App\Http\Controllers\Controller::class, 'prosesPembayaran'])->name('checkout.bayar');
+    Route::delete('/cart/{id}', [\App\Http\Controllers\Controller::class, 'deleteCartItem'])
+    ->name('cart.delete');
+
 });
 
 
