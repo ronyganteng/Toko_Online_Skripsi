@@ -15,7 +15,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            {{-- penting: method POST + @method('PUT') + enctype --}}
             <form action="{{ route('updateData', $data->id) }}"
                   method="POST" enctype="multipart/form-data"
                   onsubmit="this.querySelector('button[type=submit]').disabled = true;">
@@ -59,7 +58,7 @@
                         <div class="col-sm-7">
                             <select class="form-control" id="kategoriEdit" name="kategori"
                                     data-value="{{ $data->kategory }}">
-                                {{-- opsi diisi via JS --}}
+                                {{-- opsi akan diisi lewat JS --}}
                             </select>
                         </div>
                     </div>
@@ -77,6 +76,14 @@
                         <div class="col-sm-7">
                             <input type="number" class="form-control" id="quantity"
                                    name="quantity" value="{{ $data->quantity }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-5 col-form-label">Deskripsi Produk</label>
+                        <div class="col-sm-7">
+                            <textarea class="form-control" name="deskripsi" rows="4"
+                                      placeholder="Tulis deskripsi produk...">{{ $data->deskripsi }}</textarea>
                         </div>
                     </div>
 
@@ -154,7 +161,8 @@ function loadKategoriEdit(type) {
     });
 }
 
-// langsung jalan ketika modal dimuat via AJAX
+// ketika modal ini dimuat via AJAX, script ini dieksekusi setelah HTML masuk,
+// jadi kita langsung panggil sekali:
 (function initEditModal() {
     const typeEl = document.getElementById('typeEdit');
     if (typeEl) {

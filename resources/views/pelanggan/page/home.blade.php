@@ -133,9 +133,17 @@
         border-width: 2px;
     }
 
-    /* PAGINATION WRAP */
     .pagination-summary {
         font-size: 13px;
+    }
+
+    @media (max-width: 767.98px) {
+        .home-hero {
+            padding: 24px 18px;
+        }
+        .home-hero-title {
+            font-size: 24px;
+        }
     }
 </style>
 
@@ -183,7 +191,6 @@
             </div>
         </div>
         <div class="col-md-5 text-center">
-            {{-- Bisa nanti diganti gambar banner khusus kalau ada --}}
             <img src="{{ asset('assets/images/contact.jpg') }}"
                  alt="Banner"
                  style="max-width: 100%; border-radius: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); object-fit: cover;">
@@ -213,27 +220,28 @@
     <div class="mt-2 mb-4 d-flex flex-wrap gap-4">
         @foreach ($best as $b)
             <div class="card product-card">
-                <div class="card-header">
-                    <img src="{{ asset('storage/product/' . $b->foto) }}"
-                         alt="{{ $b->nama_product }}">
-                </div>
-                <div class="card-body">
-                    <p class="product-name mb-1">{{ $b->nama_product }}</p>
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <span class="product-meta">
-                            <i class="fa-regular fa-star text-warning"></i> 5.0
-                        </span>
-                        <span class="badge badge-stock">
-                            Best Seller
-                        </span>
+                <a href="{{ route('product.show', $b->id) }}" class="text-decoration-none text-dark">
+                    <div class="card-header">
+                        <img src="{{ asset('storage/product/' . $b->foto) }}"
+                             alt="{{ $b->nama_product }}">
                     </div>
-                </div>
+                    <div class="card-body">
+                        <p class="product-name mb-1">{{ $b->nama_product }}</p>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="product-meta">
+                                <i class="fa-regular fa-star text-warning"></i> 5.0
+                            </span>
+                            <span class="badge badge-stock">
+                                Best Seller
+                            </span>
+                        </div>
+                    </div>
+                </a>
                 <div class="card-footer d-flex justify-content-between align-items-center">
                     <p class="m-0 product-price">
                         Rp {{ number_format($b->harga, 0, ',', '.') }}
                     </p>
 
-                    {{-- FORM ADD TO CART BEST SELLER --}}
                     <form action="{{ route('addToCart') }}" method="POST" class="m-0">
                         @csrf
                         <input type="hidden" name="id_barang" value="{{ $b->id }}">
@@ -264,27 +272,28 @@
         @else
             @foreach ($data as $p)
                 <div class="card product-card">
-                    <div class="card-header">
-                        <img src="{{ asset('storage/product/' . $p->foto) }}"
-                             alt="{{ $p->nama_product }}">
-                    </div>
-                    <div class="card-body">
-                        <p class="product-name mb-1">{{ $p->nama_product }}</p>
-                        <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="product-meta">
-                                <i class="fa-regular fa-star text-warning"></i> 5.0
-                            </span>
-                            <span class="badge badge-stock">
-                                Stok: {{ $p->quantity }}
-                            </span>
+                    <a href="{{ route('product.show', $p->id) }}" class="text-decoration-none text-dark">
+                        <div class="card-header">
+                            <img src="{{ asset('storage/product/' . $p->foto) }}"
+                                 alt="{{ $p->nama_product }}">
                         </div>
-                    </div>
+                        <div class="card-body">
+                            <p class="product-name mb-1">{{ $p->nama_product }}</p>
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="product-meta">
+                                    <i class="fa-regular fa-star text-warning"></i> 5.0
+                                </span>
+                                <span class="badge badge-stock">
+                                    Stok: {{ $p->quantity }}
+                                </span>
+                            </div>
+                        </div>
+                    </a>
                     <div class="card-footer d-flex justify-content-between align-items-center">
                         <p class="m-0 product-price">
                             Rp {{ number_format($p->harga, 0, ',', '.') }}
                         </p>
 
-                        {{-- FORM ADD TO CART NEW PRODUCT --}}
                         <form action="{{ route('addToCart') }}" method="POST" class="m-0">
                             @csrf
                             <input type="hidden" name="id_barang" value="{{ $p->id }}">

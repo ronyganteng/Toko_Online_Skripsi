@@ -3,6 +3,15 @@
 @section('content')
 <div class="container py-4">
 
+    {{-- ALERT SUCCESS --}}
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+        </div>
+    @endif
+
     {{-- HERO SECTION --}}
     <div class="row align-items-center mb-4">
         <div class="col-md-7 mb-3 mb-md-0">
@@ -51,7 +60,7 @@
             </div>
         </div>
 
-        {{-- Bisa pakai ilustrasi / foto --}}
+        {{-- GAMBAR SAMPING --}}
         <div class="col-md-5 text-center">
             <img src="{{ asset('assets/images/contact.jpg') }}"
                  alt="Contact St. Benedictus"
@@ -80,7 +89,7 @@
                 </div>
                 <div class="card-body">
 
-                    <form action="#" method="POST">
+                    <form action="{{ route('contact.feedback.store') }}" method="POST">
                         @csrf
                         <div class="mb-3 row align-items-center">
                             <label for="email" class="col-sm-3 col-form-label contact-label">
@@ -88,7 +97,8 @@
                             </label>
                             <div class="col-sm-9">
                                 <input type="email" class="form-control" id="email"
-                                       name="email" placeholder="Masukan E-mail Anda">
+                                       name="email" placeholder="Masukan E-mail Anda (opsional)"
+                                       value="{{ old('email') }}">
                             </div>
                         </div>
 
@@ -98,7 +108,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <textarea class="form-control" id="pesan" name="pesan"
-                                          rows="4" placeholder="Tulis kritik, saran, atau pertanyaan Anda di sini..."></textarea>
+                                          rows="4" placeholder="Tulis kritik, saran, atau pertanyaan Anda di sini..." required>{{ old('pesan') }}</textarea>
                             </div>
                         </div>
 
@@ -151,7 +161,6 @@ document.addEventListener('DOMContentLoaded', function () {
         <span style="font-size:12px;">Klik untuk melihat lebih dekat.</span>
     `).openPopup();
 
-    // Tambahan lingkaran lembut sekitar toko
     L.circle([tokoLat, tokoLng], {
         radius: 300,
         color: '#b71c1c',

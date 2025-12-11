@@ -48,4 +48,21 @@ class ShopController extends Controller
     ]);
 }
 
+    public function show($id)
+    {
+        $product = product::findOrFail($id);
+
+        // hitung jumlah keranjang (sesuaikan dengan logikamu)
+        $count = TblCart::where([
+            'idUser' => 'guest123', // kalau kamu sudah pakai customer id, ganti di sini
+            'status' => 0,
+        ])->count();
+
+        return view('pelanggan.page.product-detail', [
+            'title'   => $product->nama_product,
+            'product' => $product,
+            'count'   => $count,
+        ]);
+    }
 }
+

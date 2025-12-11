@@ -2,92 +2,69 @@
 
 @section('content')
 <style>
-    /* AREA SHOP */
-    .shop-hero {
-        background: linear-gradient(135deg, #b71c1c, #ff7043);
-        color: #fff;
-        border-radius: 16px;
-        padding: 24px 28px;
+    .shop-layout {
         margin-top: 24px;
-        margin-bottom: 24px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    }
-    .shop-hero h3 {
-        font-weight: 700;
-        margin-bottom: 4px;
-    }
-    .shop-hero p {
-        margin: 0;
-        opacity: 0.9;
     }
 
-    /* SIDEBAR CATEGORY */
+    /* SIDEBAR CARD */
     .shop-sidebar-card {
         border-radius: 18px;
         border: none;
-        box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        background: #ffffff;
+        box-shadow: 0 10px 24px rgba(0,0,0,0.10);
         overflow: hidden;
     }
     .shop-sidebar-card .card-header {
-        background: #fafafa;
-        border-bottom: none;
+        background: linear-gradient(135deg, #5d1010, #b71c1c);
+        color: #fff;
         font-weight: 600;
-        font-size: 18px;
+        font-size: 15px;
         display: flex;
         align-items: center;
         gap: 8px;
     }
     .shop-sidebar-card .card-header i {
-        color: #b71c1c;
-    }
-    .category-chip-title {
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: .05em;
-        color: #b71c1c;
-        margin-bottom: 6px;
-        font-weight: 600;
+        font-size: 18px;
     }
 
-    .accordion-button {
-        background-color: #fff;
+    .shop-category-header {
+        font-size: 13px;
         font-weight: 600;
-    }
-    .accordion-button:not(.collapsed) {
-        background-color: #fff3e0;
-        color: #bf360c;
-        box-shadow: none;
-    }
-    .accordion-body a.page-link {
-        border-radius: 999px;
-        border: none;
-        padding: 6px 12px;
-        font-size: 14px;
+        text-transform: uppercase;
         color: #555;
+        margin-bottom: 4px;
+        margin-top: 8px;
+    }
+
+    .shop-category-link {
+        font-size: 13px;
+        padding: 6px 10px;
+        border-radius: 999px;
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
         text-decoration: none;
+        color: #444;
+        background: #f5f5f5;
+        margin-bottom: 6px;
+        border: 1px solid transparent;
+        transition: all .15s ease;
     }
-    .accordion-body a.page-link i {
+    .shop-category-link i {
         font-size: 11px;
     }
-    .accordion-body a.page-link:hover {
+    .shop-category-link:hover {
         background: #ffe0b2;
-        color: #bf360c;
+        border-color: #ffb74d;
+        color: #5d1010;
     }
-    .accordion-body a.page-link.active-filter {
-        background: #bf360c;
-        color: #fff;
-    }
-
-    .btn-reset-filter {
-        border-radius: 999px;
-        font-weight: 500;
-        font-size: 14px;
+    .shop-category-link.active {
+        background: #ffb74d;
+        border-color: #fb8c00;
+        color: #5d1010;
     }
 
-    /* PRODUCT LIST */
+    /* PRODUCT CARD (SAMA DENGAN HOME) */
     .product-card {
         width: 230px;
         border-radius: 16px;
@@ -127,6 +104,13 @@
         border-radius: 999px;
         padding: 3px 9px;
     }
+    .badge-type {
+        background: #f3e5f5;
+        color: #6a1b9a;
+        font-size: 11px;
+        border-radius: 999px;
+        padding: 3px 9px;
+    }
     .product-price {
         font-size: 16px;
         font-weight: 700;
@@ -137,199 +121,158 @@
         padding: 6px 10px;
         border-width: 2px;
     }
-    .btn-cart i {
-        font-size: 16px;
+
+    .section-title {
+        font-weight: 700;
+        font-size: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+    }
+    .section-title i {
+        color: #b71c1c;
+    }
+    .section-subtitle {
+        font-size: 13px;
+        color: #777;
+        margin-bottom: 12px;
     }
 
-    /* SEARCH BAR */
-    .shop-search-wrapper {
-        max-width: 420px;
-        width: 100%;
-    }
-    .shop-search-wrapper input {
-        border-radius: 999px 0 0 999px;
-    }
-    .shop-search-wrapper button {
-        border-radius: 0 999px 999px 0;
-        padding-inline: 18px;
-        background: #b71c1c;
-        border-color: #b71c1c;
-    }
-
-    .filter-badges span {
-        font-size: 12px;
+    @media (max-width: 767.98px) {
+        .product-card {
+            width: 100%;
+        }
     }
 </style>
 
-<div class="shop-hero">
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
-        <div>
-            <h3>Temukan Perlengkapan Rohani Terbaik</h3>
-            <p>Pilih salib, patung, dan aksesoris rohani yang cocok untukmu atau orang yang kamu kasihi.</p>
-        </div>
-        <div class="text-end">
-            <span class="badge bg-light text-dark">
-                {{ $products->total() }} produk tersedia
-            </span>
-        </div>
-    </div>
-</div>
+<div class="row shop-layout">
 
-<div class="row">
-
-    {{-- SIDEBAR KATEGORI --}}
+    {{-- ========== SIDEBAR KATEGORI ========== --}}
     <div class="col-md-3 mb-4">
         <div class="card shop-sidebar-card">
             <div class="card-header">
                 <i class="fa-solid fa-filter"></i>
-                <span>Kategori Produk</span>
+                <span>Filter Kategori</span>
             </div>
             <div class="card-body">
-                <p class="category-chip-title">Pilih kategori</p>
 
-                <div class="accordion accordion-flush" id="accordionFlushExample">
-
-                    {{-- SALIB --}}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="flush-headingOne">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#flush-collapseOne" aria-expanded="false"
-                                    aria-controls="flush-collapseOne">
-                                <i class="fa-solid fa-cross me-2 text-danger"></i> Salib
-                            </button>
-                        </h2>
-                        <div id="flush-collapseOne" class="accordion-collapse collapse"
-                             aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column gap-2">
-                                    <a href="{{ route('shop', ['type' => 'salib', 'kategori' => 'salibkayu']) }}"
-                                       class="page-link {{ request('type')=='salib' && request('kategori')=='salibkayu' ? 'active-filter' : '' }}">
-                                        <i class="fas fa-plus"></i> Salib Kayu
-                                    </a>
-                                    <a href="{{ route('shop', ['type' => 'salib', 'kategori' => 'salibbesi']) }}"
-                                       class="page-link {{ request('type')=='salib' && request('kategori')=='salibbesi' ? 'active-filter' : '' }}">
-                                        <i class="fas fa-plus"></i> Salib Besi
-                                    </a>
-                                    <a href="{{ route('shop', ['type' => 'salib', 'kategori' => 'salibcustom']) }}"
-                                       class="page-link {{ request('type')=='salib' && request('kategori')=='salibcustom' ? 'active-filter' : '' }}">
-                                        <i class="fas fa-plus"></i> Salib Custom
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                {{-- SALIB --}}
+                <div class="mb-3">
+                    <div class="shop-category-header">Salib</div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{{ route('shop', ['type' => 'salib', 'kategori' => 'salibkayu']) }}"
+                           class="shop-category-link {{ request('type')=='salib' && request('kategori')=='salibkayu' ? 'active' : '' }}">
+                            <i class="fas fa-plus"></i> Salib Kayu
+                        </a>
+                        <a href="{{ route('shop', ['type' => 'salib', 'kategori' => 'salibbesi']) }}"
+                           class="shop-category-link {{ request('type')=='salib' && request('kategori')=='salibbesi' ? 'active' : '' }}">
+                            <i class="fas fa-plus"></i> Salib Besi
+                        </a>
+                        <a href="{{ route('shop', ['type' => 'salib', 'kategori' => 'salibcustom']) }}"
+                           class="shop-category-link {{ request('type')=='salib' && request('kategori')=='salibcustom' ? 'active' : '' }}">
+                            <i class="fas fa-plus"></i> Salib Custom
+                        </a>
                     </div>
+                </div>
 
-                    {{-- ALKITAB / PATUNG --}}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="flush-headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#flush-collapseTwo" aria-expanded="false"
-                                    aria-controls="flush-collapseTwo">
-                                <i class="fa-solid fa-book-bible me-2 text-primary"></i> Alkitab
-                            </button>
-                        </h2>
-                        <div id="flush-collapseTwo" class="accordion-collapse collapse"
-                             aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column gap-2">
-                                    <a href="{{ route('shop', ['type' => 'alkitab', 'kategori' => 'alkitabkristen']) }}"
-                                       class="page-link {{ request('type')=='alkitab' && request('kategori')=='alkitabkristen' ? 'active-filter' : '' }}">
-                                        <i class="fas fa-plus"></i> Alkitab Kristen
-                                    </a>
-                                    <a href="{{ route('shop', ['type' => 'alkitab', 'kategori' => 'alkitabkatolik']) }}"
-                                       class="page-link {{ request('type')=='alkitab' && request('kategori')=='alkitabkatolik' ? 'active-filter' : '' }}">
-                                        <i class="fas fa-plus"></i> Alkitab Katolik
-                                    </a>
-                                    <a href="{{ route('shop', ['type' => 'alkitab', 'kategori' => 'alkitabcustom']) }}"
-                                       class="page-link {{ request('type')=='alkitab' && request('kategori')=='alkitabcustom' ? 'active-filter' : '' }}">
-                                        <i class="fas fa-plus"></i> Alkitab Custom
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                {{-- ALKITAB / PATUNG / LAINNYA --}}
+                <div class="mb-3">
+                    <div class="shop-category-header">Alkitab</div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{{ route('shop', ['type' => 'alkitab', 'kategori' => 'alkitabkristen']) }}"
+                           class="shop-category-link {{ request('type')=='alkitab' && request('kategori')=='alkitabkristen' ? 'active' : '' }}">
+                            <i class="fas fa-plus"></i> Alkitab Kristen
+                        </a>
+                        <a href="{{ route('shop', ['type' => 'alkitab', 'kategori' => 'alkitabkatolik']) }}"
+                           class="shop-category-link {{ request('type')=='alkitab' && request('kategori')=='alkitabkatolik' ? 'active' : '' }}">
+                            <i class="fas fa-plus"></i> Alkitab Katolik
+                        </a>
+                        <a href="{{ route('shop', ['type' => 'alkitab', 'kategori' => 'alkitabcustom']) }}"
+                           class="shop-category-link {{ request('type')=='alkitab' && request('kategori')=='alkitabcustom' ? 'active' : '' }}">
+                            <i class="fas fa-plus"></i> Alkitab Custom
+                        </a>
                     </div>
+                </div>
 
-                    {{-- AKSESORIS --}}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="flush-headingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#flush-collapseThree" aria-expanded="false"
-                                    aria-controls="flush-collapseThree">
-                                <i class="fa-solid fa-beads me-2 text-success"></i> Aksesoris
-                            </button>
-                        </h2>
-                        <div id="flush-collapseThree" class="accordion-collapse collapse"
-                             aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column gap-2">
-                                    <a href="{{ route('shop', ['type' => 'aksesoris', 'kategori' => 'gelang']) }}"
-                                       class="page-link {{ request('type')=='aksesoris' && request('kategori')=='gelang' ? 'active-filter' : '' }}">
-                                        <i class="fas fa-plus"></i> Gelang
-                                    </a>
-                                    <a href="{{ route('shop', ['type' => 'aksesoris', 'kategori' => 'kalung']) }}"
-                                       class="page-link {{ request('type')=='aksesoris' && request('kategori')=='kalung' ? 'active-filter' : '' }}">
-                                        <i class="fas fa-plus"></i> Kalung
-                                    </a>
-                                    <a href="{{ route('shop', ['type' => 'aksesoris', 'kategori' => 'rosario']) }}"
-                                       class="page-link {{ request('type')=='aksesoris' && request('kategori')=='rosario' ? 'active-filter' : '' }}">
-                                        <i class="fas fa-plus"></i> Rosario
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                {{-- AKSESORIS --}}
+                <div class="mb-3">
+                    <div class="shop-category-header">Aksesoris</div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{{ route('shop', ['type' => 'aksesoris', 'kategori' => 'gelang']) }}"
+                           class="shop-category-link {{ request('type')=='aksesoris' && request('kategori')=='gelang' ? 'active' : '' }}">
+                            <i class="fas fa-plus"></i> Gelang
+                        </a>
+                        <a href="{{ route('shop', ['type' => 'aksesoris', 'kategori' => 'kalung']) }}"
+                           class="shop-category-link {{ request('type')=='aksesoris' && request('kategori')=='kalung' ? 'active' : '' }}">
+                            <i class="fas fa-plus"></i> Kalung
+                        </a>
+                        <a href="{{ route('shop', ['type' => 'aksesoris', 'kategori' => 'rosario']) }}"
+                           class="shop-category-link {{ request('type')=='aksesoris' && request('kategori')=='rosario' ? 'active' : '' }}">
+                            <i class="fas fa-plus"></i> Rosario
+                        </a>
                     </div>
-
                 </div>
 
                 {{-- RESET FILTER --}}
-                <div class="mt-4">
-                    <a href="{{ route('shop') }}" class="btn btn-outline-secondary btn-reset-filter w-100">
-                        <i class="fa-solid fa-rotate-left me-1"></i> Reset Filter
-                    </a>
-                </div>
+                <hr>
+                <a href="{{ route('shop') }}" class="btn btn-sm btn-outline-secondary w-100">
+                    Reset Semua Filter
+                </a>
             </div>
         </div>
     </div>
 
-    {{-- KOLOM PRODUK + SEARCH --}}
+    {{-- ========== KOLOM PRODUK + SEARCH ========== --}}
     <div class="col-md-9">
 
-        {{-- FORM SEARCH --}}
-        <div class="d-flex justify-content-end mb-3">
-            <form action="{{ route('shop') }}" method="GET" class="d-flex shop-search-wrapper">
-                @if(request('type'))
-                    <input type="hidden" name="type" value="{{ request('type') }}">
-                @endif
-                @if(request('kategori'))
-                    <input type="hidden" name="kategori" value="{{ request('kategori') }}">
-                @endif
+        {{-- HEADER & SEARCH --}}
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+            <div class="mb-2">
+                <h4 class="section-title">
+                    <i class="fa-solid fa-store"></i>
+                    Katalog Produk
+                </h4>
+                <p class="section-subtitle">
+                    Temukan salib, patung, rosario, dan perlengkapan rohani lainnya.
+                </p>
+            </div>
 
-                <input type="text"
-                       name="search"
-                       class="form-control"
-                       placeholder="Cari nama produk..."
-                       value="{{ request('search') }}">
-                <button class="btn btn-primary ms-0">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-            </form>
+            <div class="mb-2" style="max-width: 400px; width: 100%;">
+                <form action="{{ route('shop') }}" method="GET" class="d-flex">
+                    {{-- Pertahankan filter type & kategori saat search --}}
+                    @if(request('type'))
+                        <input type="hidden" name="type" value="{{ request('type') }}">
+                    @endif
+                    @if(request('kategori'))
+                        <input type="hidden" name="kategori" value="{{ request('kategori') }}">
+                    @endif
+
+                    <input type="text"
+                           name="search"
+                           class="form-control"
+                           placeholder="Cari produk..."
+                           value="{{ request('search') }}">
+                    <button class="btn btn-primary ms-2">Cari</button>
+                </form>
+            </div>
         </div>
 
         {{-- BADGE INFO FILTER --}}
-        <div class="mb-3 filter-badges">
+        <div class="mb-3">
             @if(request('search'))
                 <span class="badge bg-secondary me-2">
-                    <i class="fa-solid fa-magnifying-glass me-1"></i> "{{ request('search') }}"
+                    Search: "{{ request('search') }}"
                 </span>
             @endif
             @if(request('type'))
                 <span class="badge bg-info text-dark me-2">
-                    <i class="fa-solid fa-layer-group me-1"></i> Type: {{ request('type') }}
+                    Type: {{ request('type') }}
                 </span>
             @endif
             @if(request('kategori'))
                 <span class="badge bg-success me-2">
-                    <i class="fa-solid fa-tag me-1"></i> Kategori: {{ request('kategori') }}
+                    Kategori: {{ request('kategori') }}
                 </span>
             @endif
         </div>
@@ -337,29 +280,48 @@
         {{-- LIST PRODUK --}}
         <div class="d-flex flex-wrap gap-4 mb-5">
             @if ($products->isEmpty())
-                <p class="text-muted">Belum ada produk untuk filter yang dipilih.</p>
+                <p class="text-muted">Belum ada produk yang cocok dengan filter / pencarian.</p>
             @else
                 @foreach ($products as $p)
                     <div class="card product-card">
-                        <div class="card-header">
-                            <img src="{{ asset('storage/product/' . $p->foto) }}"
-                                 alt="{{ $p->nama_product }}">
-                        </div>
-                        <div class="card-body">
-                            <p class="product-name mb-1">{{ $p->nama_product }}</p>
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <span class="product-meta">
-                                    <i class="fa-regular fa-star text-warning"></i> 5.0
-                                </span>
-                                <span class="badge badge-stock">
-                                    Stok: {{ $p->quantity }}
-                                </span>
+                        <a href="{{ route('product.show', $p->id) }}" class="text-decoration-none text-dark">
+                            <div class="card-header">
+                                <img src="{{ asset('storage/product/' . $p->foto) }}"
+                                     alt="{{ $p->nama_product }}">
                             </div>
-                        </div>
-                        <div class="card-footer d-flex flex-row justify-content-between align-items-center">
+                            <div class="card-body">
+                                <p class="product-name mb-1">{{ $p->nama_product }}</p>
+
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="product-meta">
+                                        <i class="fa-regular fa-star text-warning"></i> 5.0
+                                    </span>
+                                    <span class="badge badge-stock">
+                                        Stok: {{ $p->quantity }}
+                                    </span>
+                                </div>
+
+                                {{-- type / kategori kecil di bawah --}}
+                                <div style="font-size: 11px; color:#777;">
+                                    @if($p->type)
+                                        <span class="badge-type me-1">
+                                            {{ ucfirst($p->type) }}
+                                        </span>
+                                    @endif
+                                    @if($p->kategory)
+                                        <span class="badge bg-light text-muted border">
+                                            {{ $p->kategory }}
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        </a>
+
+                        <div class="card-footer d-flex justify-content-between align-items-center">
                             <p class="m-0 product-price">
                                 Rp {{ number_format($p->harga, 0, ',', '.') }}
                             </p>
+
                             <form action="{{ route('addToCart') }}" method="POST" class="m-0">
                                 @csrf
                                 <input type="hidden" name="id_barang" value="{{ $p->id }}">
@@ -378,8 +340,10 @@
         @if($products->hasPages())
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <div>
-                    <strong>Menampilkan {{ $products->firstItem() }} - {{ $products->lastItem() }}
-                        dari total {{ $products->total() }} produk</strong>
+                    <strong>
+                        Menampilkan {{ $products->firstItem() }} - {{ $products->lastItem() }}
+                        dari total {{ $products->total() }} data
+                    </strong>
                 </div>
                 <div>
                     {{ $products->links('pagination::bootstrap-5') }}

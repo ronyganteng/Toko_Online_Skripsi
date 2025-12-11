@@ -77,8 +77,12 @@
                                 <td>{{ $data->firstItem() + $y }}</td>
 
                                 <td>
-                                    <img src="{{ asset('storage/product/' . $x->foto) }}" style="width: 100px">
-                                </td>
+    @if ($x->foto)
+        <img src="{{ asset('storage/product/' . $x->foto) }}" style="width: 100px">
+    @else
+        <span class="text-muted">No image</span>
+    @endif
+</td>
 
                                 <td>{{ $x->created_at }}</td>
                                 <td>{{ $x->sku }}</td>

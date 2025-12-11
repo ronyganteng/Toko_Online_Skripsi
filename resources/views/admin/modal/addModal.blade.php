@@ -64,6 +64,15 @@
                             <input type="number" class="form-control" name="quantity">
                         </div>
                     </div>
+                    {{-- DESKRIPSI PRODUK --}}
+<div class="mb-3 row">
+    <label class="col-sm-5 col-form-label">Deskripsi Produk</label>
+    <div class="col-sm-7">
+        <textarea class="form-control" name="deskripsi" rows="4"
+                  placeholder="Tulis deskripsi singkat produk, bahan, ukuran, warna, dll..."></textarea>
+    </div>
+</div>
+
 
                     {{-- FOTO --}}
                     <div class="mb-3 row">

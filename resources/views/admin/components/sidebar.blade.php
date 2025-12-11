@@ -35,6 +35,14 @@
                                     </div>
                                 </a>
                             </li>
+                            <li class="navbar-item rounded {{Request::path()=='admin/feedback' ? "bg-info" : ""}}">
+    <a href="{{ route('admin.feedback.index') }}" class="">
+        <div class="d-flex gap-3">
+            <span class="material-icons">feedback</span>
+            <p class="m-0 p-0">Kritik & Saran</p>
+        </div>
+    </a>
+</li>
                             <li class="navbar-item">
                                 <a href="logout" class="nav-link">
                                     <div class="d-flex gap-3">

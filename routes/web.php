@@ -13,6 +13,9 @@ use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\CustomerPasswordController;
 use App\Http\Controllers\CustomerProfileController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\FeedbackController;
+
+Route::get('/product/{id}', [ShopController::class, 'show'])->name('product.show');
 
 // ================== HALAMAN UMUM ==================
 Route::get('/', [TransaksiController::class, 'index'])->name('home');
@@ -20,6 +23,8 @@ Route::post('/addToCart', [TransaksiController::class, 'addToCart'])->name('addT
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/contact', [\App\Http\Controllers\Controller::class, 'contact'])->name('contact');
 
+Route::post('/contact/feedback', [FeedbackController::class, 'store'])
+    ->name('contact.feedback.store');
 // ================== AUTH CUSTOMER ==================
 Route::get('/customer/login', [CustomerAuthController::class, 'showLogin'])->name('customer.login');
 Route::post('/customer/login', [CustomerAuthController::class, 'login'])->name('customer.login.post');
@@ -75,6 +80,12 @@ Route::get('/admin', [AdminController::class, 'login'])->name('login');
 Route::get('/admin/dashboard', [AdminController::class, 'admin'])->name('admin');
 Route::get('/admin/logout', [AdminController::class, 'logout'])->name('logout');
 Route::get('/admin/product', [ProductController::class, 'index'])->name('product');
+
+// FEEDBACK (ADMIN)
+Route::get('/admin/feedback', [FeedbackController::class, 'index'])
+    ->name('admin.feedback.index');
+Route::delete('/admin/feedback/{id}', [FeedbackController::class, 'destroy'])
+    ->name('admin.feedback.destroy');
 
 Route::get('/admin/user_management', [UserController::class, 'index'])->name('userManagement');
 Route::get('/admin/editUser/{id}', [UserController::class, 'show'])->name('showDataUser');

@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\product;
-use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
     /**
-     * Tampilkan list product admin
+     * LIST PRODUCT ADMIN
      */
     public function index(Request $request)
     {
-        $query = product::where('is_active', 1)->orderBy('created_at', 'desc');
+        $query = Product::where('is_active', 1)->orderBy('created_at', 'desc');
 
-        // filter tanggal
+        // Filter tanggal
         if ($request->filled('tgl_awal')) {
             $query->whereDate('created_at', '>=', $request->tgl_awal);
         }
@@ -23,14 +23,14 @@ class ProductController extends Controller
             $query->whereDate('created_at', '<=', $request->tgl_akhir);
         }
 
-        // search
+        // Search
         if ($request->filled('q')) {
             $search = $request->q;
             $query->where(function ($q) use ($search) {
                 $q->where('sku', 'like', "%{$search}%")
-                  ->orWhere('nama_product', 'like', "%{$search}%")
-                  ->orWhere('kategory', 'like', "%{$search}%")
-                  ->orWhere('type', 'like', "%{$search}%");
+                    ->orWhere('nama_product', 'like', "%{$search}%")
+                    ->orWhere('kategory', 'like', "%{$search}%")
+                    ->orWhere('type', 'like', "%{$search}%");
             });
         }
 
@@ -43,20 +43,21 @@ class ProductController extends Controller
         ]);
     }
 
-    
-
+    /**
+     * MODAL EDIT PRODUCT (AJAX)
+     */
     public function show($id)
-{
-    $data = product::findOrFail($id);   // gunakan model product kamu
+    {
+        $data = Product::findOrFail($id);
 
-    return view('admin.modal.editModal', [
-        'title' => 'Edit data product',
-        'data'  => $data,
-    ])->render();
-}
+        return view('admin.modal.editModal', [
+            'title' => 'Edit data product',
+            'data'  => $data,
+        ])->render();
+    }
 
     /**
-     * View modal tambah product
+     * MODAL TAMBAH PRODUCT (AJAX)
      */
     public function addModal()
     {
@@ -67,102 +68,112 @@ class ProductController extends Controller
     }
 
     /**
-     * Simpan product baru
+     * SIMPAN PRODUCT BARU
      */
     public function store(Request $request)
-{
-    $request->validate([
-        'sku'      => 'required',
-        'nama'     => 'required|string',
-        'type'     => 'required|string',
-        'kategori' => 'required|string',
-        'harga'    => 'required|numeric',
-        'quantity' => 'required|numeric',
-    ]);
+    {
+        $validated = $request->validate([
+            'sku'       => 'required|string|max:100',
+            'nama'      => 'required|string|max:255',
+            'type'      => 'required|string',
+            'kategori'  => 'required|string',
+            'harga'     => 'required|numeric|min:0',
+            'quantity'  => 'required|integer|min:0',
+            'foto'      => 'required|image|mimes:jpg,jpeg,png|max:4096',
+            'deskripsi' => 'nullable|string',
+        ]);
 
-    $data = new product;
-    $data->sku          = $request->sku;
-    $data->nama_product = $request->nama;
-    $data->type         = $request->type;
-    $data->kategory     = $request->kategori;
-    $data->harga        = $request->harga;
-    $data->quantity     = $request->quantity;
-    $data->discount     = 10/100;
-    $data->is_active    = 1;
+        // === SIMPAN FOTO KE public/storage/product (tanpa perlu storage:link ribet) ===
+        $file = $request->file('foto');
+        $namaFile = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
 
-    if ($request->hasFile('foto')) {
-        $photo    = $request->file('foto');
-        $filename = date('Ymd') . '_' . $photo->getClientOriginalName();
-        $photo->move(public_path('storage/product'), $filename);
-        $data->foto = $filename;
+        // pastikan foldernya ada
+        $destination = public_path('storage/product');
+        if (!is_dir($destination)) {
+            mkdir($destination, 0775, true);
+        }
+
+        $file->move($destination, $namaFile);
+
+        // SIMPAN KE DATABASE
+        Product::create([
+            'sku'          => $validated['sku'],
+            'nama_product' => $validated['nama'],
+            'type'         => $validated['type'],
+            'kategory'     => $validated['kategori'],
+            'harga'        => $validated['harga'],
+            'quantity'     => $validated['quantity'],
+            'foto'         => $namaFile,
+            'discount'     => 0.10,                       // default biar nggak error NOT NULL
+            'deskripsi'    => $validated['deskripsi'] ?? null,
+            'is_active'    => 1,
+        ]);
+
+        return redirect()->route('product')->with('Berhasil', 'Product berhasil ditambahkan.');
     }
 
-    $data->save();
+    /**
+     * UPDATE PRODUCT
+     */
+    public function update(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
 
-    // NOTIFIKASI TAMBAH
-    return redirect()
-        ->route('product')
-        ->with('Berhasil', 'Barang berhasil ditambahkan.');
-}
+        $validated = $request->validate([
+            'nama'      => 'required|string|max:255',
+            'type'      => 'required|string',
+            'kategori'  => 'required|string',
+            'harga'     => 'required|numeric|min:0',
+            'quantity'  => 'required|integer|min:0',
+            'foto'      => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
+            'deskripsi' => 'nullable|string',
+        ]);
 
-// app/Http/Controllers/ProductController.php
+        $dataUpdate = [
+            'nama_product' => $validated['nama'],
+            'type'         => $validated['type'],
+            'kategory'     => $validated['kategori'],
+            'harga'        => $validated['harga'],
+            'quantity'     => $validated['quantity'],
+            // kalau kosong, pakai yang lama (biar edit bisa hapus & isi lagi)
+            'deskripsi'    => $validated['deskripsi'] ?? $product->deskripsi,
+        ];
 
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'sku'      => 'required',
-        'nama'     => 'required|string',
-        'type'     => 'required|string',
-        'kategori' => 'required|string',
-        'harga'    => 'required|numeric',
-        'quantity' => 'required|numeric',
-    ]);
+        // Kalau ada foto baru, simpan & update
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $namaFile = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
 
-    $product = product::findOrFail($id);
+            $destination = public_path('storage/product');
+            if (!is_dir($destination)) {
+                mkdir($destination, 0775, true);
+            }
 
-    $product->sku          = $request->sku;
-    $product->nama_product = $request->nama;
-    $product->type         = $request->type;        // salib / patung / aksesoris
-    $product->kategory     = $request->kategori;    // salibkayu / rosario / dll
-    $product->harga        = $request->harga;
-    $product->quantity     = $request->quantity;
-    $product->discount     = 10 / 100;
-    $product->is_active    = 1;
+            $file->move($destination, $namaFile);
+            $dataUpdate['foto'] = $namaFile;
+        }
 
-    // kalau user upload foto baru, ganti
-    if ($request->hasFile('foto')) {
-        $photo    = $request->file('foto');
-        $filename = date('Ymd') . '_' . $photo->getClientOriginalName();
-        $photo->move(public_path('storage/product'), $filename);
-        $product->foto = $filename;
+        $product->update($dataUpdate);
+
+        return redirect()->route('product')->with('berhasil_update', 'Data produk berhasil diupdate.');
     }
 
-    $product->save();
+    /**
+     * HAPUS / NONAKTIFKAN PRODUCT
+     */
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
 
-    return redirect()
-        ->route('product')
-        ->with('berhasil_update', 'Barang berhasil disimpan.');
-}
+        if (DB::table('detail_transaksis')->where('id_barang', $id)->exists()) {
+            $product->is_active = 0;
+            $product->save();
+            $message = 'Produk terkait transaksi. Status diubah menjadi tidak aktif.';
+        } else {
+            $product->delete();
+            $message = 'Barang berhasil dihapus.';
+        }
 
-
-public function destroy($id)
-{
-    $product = product::findOrFail($id);
-
-    // kalau sudah dipakai di detail_transaksis → nonaktifkan aja
-    if (\DB::table('detail_transaksis')->where('id_barang', $id)->exists()) {
-        $product->is_active = 0;
-        $product->save();
-
-        $message = 'Produk terkait transaksi. Status diubah menjadi tidak aktif.';
-    } else {
-        $product->delete();
-        $message = 'Barang berhasil dihapus.';
+        return redirect()->route('product')->with('Berhasil', $message);
     }
-
-    // NOTIFIKASI HAPUS
-    return redirect()
-        ->route('product')
-        ->with('Berhasil', $message);
-}
 }
